@@ -78,6 +78,10 @@ export default function Home() {
           className="w-full max-w-md border border-border rounded-md px-3 py-2 text-sm bg-surface text-foreground placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-accent mb-8"
         />
 
+                {loading && (
+          <p className="text-sm text-muted mb-8">Loading communities…</p>
+        )}
+
         {recent.length > 0 && query === "" && (
           <div className="mb-8">
             <p className="text-xs font-medium text-muted uppercase tracking-wide mb-3">
