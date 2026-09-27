@@ -1,18 +1,18 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import ProjectCard from "@/components/ProjectCard";
-import { communities, projects } from "@/lib/mockData";
+import { getCommunity, getProjectsByCommunity } from "@/lib/api";
 
 export default async function CommunityPage({
   params,
 }: {
   params: Promise<{ communityId: string }>;
 }) {
-  const { communityId } = await params;
-  const community = communities.find((c) => c.id === communityId);
+    const { communityId } = await params;
+  const community = await getCommunity(communityId);
   if (!community) notFound();
 
-  const communityProjects = projects.filter((p) => p.communityId === communityId);
+  const communityProjects = await getProjectsByCommunity(communityId);
 
   return (
     <main className="min-h-screen bg-background">
