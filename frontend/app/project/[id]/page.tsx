@@ -5,10 +5,9 @@ import { Expense, Milestone } from "@/lib/types";
 
 const milestoneStyles: Record<Milestone["status"], { label: string; text: string; bg: string }> = {
   done: { label: "Done", text: "text-success", bg: "bg-success-bg" },
-  in_progress: { label: "In Progress", text: "text-accent", bg: "bg-accent/10" },
+  in_progress: { label: "In Progress", text: "text-accent", bg: "bg-accent-bg" },
   pending: { label: "Pending", text: "text-muted", bg: "bg-border/40" },
 };
-
 function ExpenseRow({ expense }: { expense: Expense }) {
   return (
     <tr className="border-b border-border last:border-b-0">

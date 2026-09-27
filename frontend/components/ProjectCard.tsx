@@ -1,10 +1,31 @@
 import Link from "next/link";
 import { Project } from "@/lib/types";
 
-const statusStyles: Record<Project["status"], { label: string; text: string; bg: string }> = {
-  in_progress: { label: "In Progress", text: "text-accent", bg: "bg-accent/10" },
-  complete: { label: "Complete", text: "text-success", bg: "bg-success-bg" },
-  flagged: { label: "Flagged for Review", text: "text-warning", bg: "bg-warning-bg" },
+const statusStyles: Record<
+  Project["status"],
+  { label: string; text: string; bg: string; border: string; bar: string }
+> = {
+  in_progress: {
+    label: "In Progress",
+    text: "text-accent",
+    bg: "bg-accent-bg",
+    border: "border-l-accent",
+    bar: "bg-accent",
+  },
+  complete: {
+    label: "Complete",
+    text: "text-success",
+    bg: "bg-success-bg",
+    border: "border-l-success",
+    bar: "bg-success",
+  },
+  flagged: {
+    label: "Flagged for Review",
+    text: "text-warning",
+    bg: "bg-warning-bg",
+    border: "border-l-warning",
+    bar: "bg-warning",
+  },
 };
 
 export default function ProjectCard({ project }: { project: Project }) {
@@ -14,7 +35,7 @@ export default function ProjectCard({ project }: { project: Project }) {
   return (
     <Link
       href={`/project/${project.id}`}
-      className="block border border-border bg-surface rounded-md hover:border-accent transition-colors"
+            className={`block border border-border ${style.border} border-l-4 bg-surface rounded-md hover:shadow-md transition-shadow`}
     >
       <div className="p-5">
         <div className="flex items-start justify-between gap-4">
@@ -48,8 +69,8 @@ export default function ProjectCard({ project }: { project: Project }) {
             <span>{spentPercent}%</span>
           </div>
           <div className="h-1.5 w-full bg-border rounded-full overflow-hidden">
-            <div
-              className="h-full bg-accent rounded-full"
+                        <div
+              className={`h-full ${style.bar} rounded-full`}
               style={{ width: `${spentPercent}%` }}
             />
           </div>
