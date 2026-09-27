@@ -13,7 +13,7 @@ class Evidence(BaseModel):
 router = APIRouter()
 
 @router.post("/evidence")
-def send_evidence(evi: Evidence):
+def send_evidence(evidence: Evidence):
     return {
-        "evidence": evi
+        "evidence": evidence
     }
