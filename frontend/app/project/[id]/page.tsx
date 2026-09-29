@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { projects } from "@/lib/mockData";
+import { getProject, getOfficial, getContractor } from "@/lib/api";
 import { Expense, Milestone } from "@/lib/types";
 
 const milestoneStyles: Record<Milestone["status"], { label: string; text: string; bg: string }> = {
@@ -8,6 +8,7 @@ const milestoneStyles: Record<Milestone["status"], { label: string; text: string
   in_progress: { label: "In Progress", text: "text-accent", bg: "bg-accent-bg" },
   pending: { label: "Pending", text: "text-muted", bg: "bg-border/40" },
 };
+
 function ExpenseRow({ expense }: { expense: Expense }) {
   return (
     <tr className="border-b border-border last:border-b-0">
@@ -33,8 +34,11 @@ function ExpenseRow({ expense }: { expense: Expense }) {
 
 export default async function ProjectDetail({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const project = projects.find((p) => p.id === id);
+  const project = await getProject(id);
   if (!project) notFound();
+
+  const official = await getOfficial(project.officialId);
+  const contractor = await getContractor(project.contractorId);
 
   const spentPercent = Math.round((project.spent / project.budget) * 100);
   const flaggedExpenses = project.expenses.filter((e) => e.status === "flagged");
@@ -59,11 +63,11 @@ export default async function ProjectDetail({ params }: { params: Promise<{ id: 
           <div className="space-y-3 text-sm">
             <div>
               <p className="text-muted text-xs">Contractor</p>
-              <p className="text-foreground">{project.contractor}</p>
+              <p className="text-foreground">{contractor?.name ?? "Unknown"}</p>
             </div>
             <div>
               <p className="text-muted text-xs">Recorded by (official)</p>
-              <p className="text-foreground">{project.official}</p>
+              <p className="text-foreground">{official?.name ?? "Unknown"}</p>
             </div>
             <div>
               <p className="text-muted text-xs">Budget</p>
@@ -130,8 +134,8 @@ export default async function ProjectDetail({ params }: { params: Promise<{ id: 
                 </tr>
               </thead>
               <tbody className="px-4">
-                {project.expenses.map((expense, i) => (
-                  <ExpenseRow key={i} expense={expense} />
+                {project.expenses.map((expense) => (
+                  <ExpenseRow key={expense.id} expense={expense} />
                 ))}
               </tbody>
             </table>

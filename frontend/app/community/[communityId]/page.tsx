@@ -1,18 +1,20 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import ProjectCard from "@/components/ProjectCard";
-import { getCommunity, getProjectsByCommunity } from "@/lib/api";
 
+import { getCommunity, getProjectsByCommunity, getAllOfficials, getAllContractors } from "@/lib/api";
 export default async function CommunityPage({
   params,
 }: {
   params: Promise<{ communityId: string }>;
 }) {
-    const { communityId } = await params;
+      const { communityId } = await params;
   const community = await getCommunity(communityId);
   if (!community) notFound();
 
   const communityProjects = await getProjectsByCommunity(communityId);
+  const officials = await getAllOfficials();
+  const contractors = await getAllContractors();
 
   return (
     <main className="min-h-screen bg-background">
@@ -38,9 +40,14 @@ export default async function CommunityPage({
             No tracked tenders yet in {community.name}.
           </p>
         ) : (
-          <div className="grid gap-4 sm:grid-cols-2">
+                    <div className="grid gap-4 sm:grid-cols-2">
             {communityProjects.map((project) => (
-              <ProjectCard key={project.id} project={project} />
+              <ProjectCard
+                key={project.id}
+                project={project}
+                contractorName={contractors.find((c) => c.id === project.contractorId)?.name ?? "Unknown"}
+                officialName={officials.find((o) => o.id === project.officialId)?.name ?? "Unknown"}
+              />
             ))}
           </div>
         )}

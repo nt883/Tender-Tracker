@@ -28,7 +28,15 @@ const statusStyles: Record<
   },
 };
 
-export default function ProjectCard({ project }: { project: Project }) {
+export default function ProjectCard({
+  project,
+  contractorName,
+  officialName,
+}: {
+  project: Project;
+  contractorName: string;
+  officialName: string;
+}) {
   const spentPercent = Math.round((project.spent / project.budget) * 100);
   const style = statusStyles[project.status];
 
@@ -50,14 +58,14 @@ export default function ProjectCard({ project }: { project: Project }) {
           </span>
         </div>
 
-        <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
+                <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
           <div>
             <p className="text-muted text-xs">Contractor</p>
-            <p className="text-foreground">{project.contractor}</p>
+            <p className="text-foreground">{contractorName}</p>
           </div>
           <div>
             <p className="text-muted text-xs">Official</p>
-            <p className="text-foreground">{project.official}</p>
+            <p className="text-foreground">{officialName}</p>
           </div>
         </div>
 
